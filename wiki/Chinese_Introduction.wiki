@@ -1,0 +1,104 @@
+=特點=
+
+這個 Wei Parser Generator (wpg) 是一個 LL(k) parser generator, 它具有下列特點:
+
+1) 允許使用者自訂想要的 lookahead 深度
+2) 支援 EBNF (Extended BNF) 語法或純粹的 BNF 語法.
+3) 如果 grammar 只有使用到單純的 BNF 語法, 那麼便可以命令 wpg 自動的進行:
+  1) left recursion removal. (使用 Paull's algorithm)
+  2) left factoring.
+4) 利用 graphviz 套件, wpg 可以將 grammar 轉成樹狀圖.
+
+Graphviz: http://www.graphviz.org/
+
+例如底下的 grammar 在利用 Paull's algorithm 移除 left recursion 之後會轉換成為下圖.
+
+http://lh6.google.com/wei.hu.tw/RzsrrG461PI/AAAAAAAAAEw/pqmBrDrTy7c/grammar_tree_grammar.jpg
+
+http://lh6.google.com/wei.hu.tw/RzsrrG461OI/AAAAAAAAAEo/xXjdAzgyJsw/grammar_tree.jpg
+
+=Build=
+
+Wei Parser Generator 目前支援 Microsoft Visual C++ 2005 (express) compiler. 但理論上, 任何符合 C++ 標準的 compiler 都可以順利的編譯它.
+
+Wei Parser Generator (wpg) 使用到 C++ (STL) 及 boost library, 所以要編譯 wpg 需要一個 C++ compiler (越符合 C++ standard 越好), 以及事先安裝好 boost library.
+
+boost: http://www.boost.org/
+
+=Grammar File Syntax Specification=
+
+wpg 使用的 grammar file 主要分成三大部分:
+
+  * Attribute block: 餵參數給 wpg
+  * Terminal name block: 指定這個 grammar 會用到的所有 terminal name
+  * Rule block: 指定這個 grammar 的各個 rule
+
+底下是一個 Wei Parser Generator 的 grammar file 的範本:
+
+http://lh6.google.com/wei.hu.tw/RzsrrG461NI/AAAAAAAAAEg/trO6w-yKRKY/grammar_file.jpg
+
+--------------------------------------------------
+註: 最左邊的行號是為了閱讀方便, 並不屬於 grammar file 本身.
+--------------------------------------------------
+
+解釋:
+
+在 grammar file 一開始的時候, 必須用一個被左括號 ({) 及右括號 (}) 所包起來的區域對 wpg 指定一些參數. 每一個參數都佔據一行, 並且要以分號 (;) 做為結束.
+
+  * 在第 1 行的 k = 2; 用來指定 lookahead tree 的深度. k = 2 產生的就是一個 LL(2) 的 parser.
+  * 在第 2 行的 using_pure_BNF = yes; 用來指定目前的這個 grammar file 只使用純粹的 BNF 語法 (也就是沒有使用任何的 EBNF 語法).
+--------------------------------------------------
+註: EBNF 語法包括下列四項:
+
+  * (a){{{*}}}    出現 0 次或多次
+  * (a)+    出現 1 次或多次
+  * (a)?    出現 0 次或 1 次
+  * (a|b)   出現 a 或 b
+--------------------------------------------------
+
+  * 在第 3 行的 use_paull_algo = yes; 用來指定要執行 left recursion removal. 所使用的演算法是 Paull's algorithm. 注意這個功能只有在 using_pure_BNF = yes; 的時候才有用.
+  * 在第 4 行的 enable_left_factor = yes; 用來指定在產生 parser 的 source 檔的時候, 使用 left factoring 的機制來避免 ambigious 的情況發生.
+
+在右括號 (}) 之後, 就要指定這個 grammar 所會使用到的 terminal name 了. 在右括號 (}) 與第一個 terminal name 之間要有一行的空白做為區隔 (範例的第 6 行). 並且以一個分號 (;) 作為結束 (範例的第 13 行). 這個範例的第 7~13 行就是做這件事, 指定這個 grammar 所會使用到的所有 terminal name.
+
+在這之後就可以開始指定這個 grammar 的每一個 rule 了. 在第一個 rule 跟 terminal name block 之間要有一行空白做為區隔 (範例的第 14 行), 並且每個 rule 也要以一個分號 (;) 作為結束. 如果一個 rule 可以有多個 alternative 分支, 那麼每個分支要以一個直線 (|) 做為區隔. 並且在 rule 中可以使用 EBNF 語法.
+
+底下是更多的 rule 寫法範例:
+
+"A"
+: "a" ("B" "B" ("d" "e")* | "c")* "a"
+;
+
+"B"
+: "e"
+| "f"
+;
+
+=Execute=
+
+Wei Parser Generator 的執行檔叫做 wpg.exe, 分析一個 grammar 的命令為:
+
+wpg.exe grammar_file
+
+=Unit Test=
+
+我有替 Wei Parser Generator 撰寫 Unit Testing 的檔案. 在 unit_test_grammar_analyser 目錄下, 有下列 shell script 用來自動執行 unit testing:
+
+  * regex_test.sh    用來測試 EBNF grammar
+  * test.sh          用來測試純粹 BNF grammar
+
+執行結果如下:
+
+http://lh6.google.com/wei.hu.tw/RzsrrG461RI/AAAAAAAAAFA/YyHKzIipxb4/unit_testing.jpg
+
+=如何編譯產生出來的檔案=
+
+執行完後, Wei Parser Generator 會產生數個 .cpp, .hpp 檔案, 在這些檔案中只會使用到的 C++ 及 STL, 所以不需要額外其他預先安裝好的 library. 要編譯的話, 直接用一個 C++ compiler 編譯即可 (當然越符合 C++ standard 越好).
+
+=Installation Wizard=
+
+利用 installwizard 目錄中的 create.nsi 檔案, 搭配 NSIS, 就可以方便地做出 Installation wizard.
+
+http://lh6.google.com/wei.hu.tw/RzsrrG461QI/AAAAAAAAAE4/bYSnOkBDdlQ/installwizard.jpg
+
+NSIS: http://nsis.sourceforge.net/
