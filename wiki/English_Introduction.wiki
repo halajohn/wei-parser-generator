@@ -35,7 +35,7 @@ The content of a grammar file can be devided into 3 parts:
 
 Here is an example grammar for wpg:
 
-http://lh6.google.com/wei.hu.tw/RzsrrG461NI/AAAAAAAAAEg/trO6w-yKRKY/grammar_file.jpg?imgmax=144
+http://lh6.google.com/wei.hu.tw/RzsrrG461NI/AAAAAAAAAEg/trO6w-yKRKY/grammar_file.jpg
 
 --------------------------------------------------
 Note: The line number at the left side is for convenience, and it doesn't belong to the grammar.
@@ -89,7 +89,8 @@ I write some unit testing files for wpg, and put them all into the "unit_test_gr
 
 The execution result:
 
-http://lh6.google.com/wei.hu.tw/RzsrrG461RI/AAAAAAAAAFA/YyHKzIipxb4/unit_testing.jpg?imgmax=576
+http://lh6.google.com/wei.hu.tw/RzsrrG461RI/AAAAAAAAAFA/YyHKzIipxb4/unit_testing.jpg
+
 
 =How to build the generated files=
 
