@@ -13,6 +13,8 @@ Graphviz: http://www.graphviz.org/
 
 For example, wpg will generate the following graph for the following grammar after left recursion removal.
 
+http://lh6.google.com/wei.hu.tw/RzsrrG461OI/AAAAAAAAAEo/xXjdAzgyJsw/grammar_tree.jpg
+
 =Build=
 
 Wei Parser Generator supports Microsoft Visual C++ 2005 (express) compiler now. However, theoretically, any C++ standard compliant compiler can compile wpg without problems.
@@ -32,6 +34,8 @@ The content of a grammar file can be devided into 3 parts:
   * Rule block: Specify the grammar rules.
 
 Here is an example grammar for wpg:
+
+http://lh6.google.com/wei.hu.tw/RzsrrG461NI/AAAAAAAAAEg/trO6w-yKRKY/grammar_file.jpg?imgmax=144
 
 --------------------------------------------------
 Note: The line number at the left side is for convenience, and it doesn't belong to the grammar.
@@ -85,6 +89,8 @@ I write some unit testing files for wpg, and put them all into the "unit_test_gr
 
 The execution result:
 
+http://lh6.google.com/wei.hu.tw/RzsrrG461RI/AAAAAAAAAFA/YyHKzIipxb4/unit_testing.jpg?imgmax=576
+
 =How to build the generated files=
 
 After parsing, Wei Parser Generator will generate some source (.cpp) and header (.hpp) files. wpg will only use pure C++ (include STL) in these generated files without any additional libraries, so you only need to use a C++ standard compliant compiler to compile them.
@@ -92,5 +98,7 @@ After parsing, Wei Parser Generator will generate some source (.cpp) and header 
 =Installation Wizard=
 
 Using NSIS with the "create.nsi" file in the "installwizard" directory, you can make an install wizard program conveniently.
+
+http://lh6.google.com/wei.hu.tw/RzsrrG461QI/AAAAAAAAAE4/bYSnOkBDdlQ/installwizard.jpg
 
 NSIS: http://nsis.sourceforge.net/
