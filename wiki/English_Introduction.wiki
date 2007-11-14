@@ -13,6 +13,7 @@ Graphviz: http://www.graphviz.org/
 
 For example, wpg will generate the following graph for the following grammar after left recursion removal.
 
+http://lh6.google.com/wei.hu.tw/RzsrrG461PI/AAAAAAAAAEw/pqmBrDrTy7c/grammar_tree_grammar.jpg
 http://lh6.google.com/wei.hu.tw/RzsrrG461OI/AAAAAAAAAEo/xXjdAzgyJsw/grammar_tree.jpg
 
 =Build=
