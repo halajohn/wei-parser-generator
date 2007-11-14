@@ -2,12 +2,12 @@
 
 這個 Wei Parser Generator (wpg) 是一個 LL(k) parser generator, 它具有下列特點:
 
-1) 允許使用者自訂想要的 lookahead 深度
-2) 支援 EBNF (Extended BNF) 語法或純粹的 BNF 語法.
-3) 如果 grammar 只有使用到單純的 BNF 語法, 那麼便可以命令 wpg 自動的進行:
-  1) left recursion removal. (使用 Paull's algorithm)
-  2) left factoring.
-4) 利用 graphviz 套件, wpg 可以將 grammar 轉成樹狀圖.
+  * 允許使用者自訂想要的 lookahead 深度
+  * 支援 EBNF (Extended BNF) 語法或純粹的 BNF 語法.
+  * 如果 grammar 只有使用到單純的 BNF 語法, 那麼便可以命令 wpg 自動的進行:
+    # left recursion removal. (使用 Paull's algorithm)
+    # left factoring.
+  * 利用 graphviz 套件, wpg 可以將 grammar 轉成樹狀圖.
 
 Graphviz: http://www.graphviz.org/
 
