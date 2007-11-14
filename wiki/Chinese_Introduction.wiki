@@ -48,12 +48,11 @@ http://lh6.google.com/wei.hu.tw/RzsrrG461NI/AAAAAAAAAEg/trO6w-yKRKY/grammar_file
   * 在第 1 行的 k = 2; 用來指定 lookahead tree 的深度. k = 2 產生的就是一個 LL(2) 的 parser.
   * 在第 2 行的 using_pure_BNF = yes; 用來指定目前的這個 grammar file 只使用純粹的 BNF 語法 (也就是沒有使用任何的 EBNF 語法).
 --------------------------------------------------
-註: EBNF 語法包括下列四項:
-
-  * (a){{{*}}}    出現 0 次或多次
-  * (a)+    出現 1 次或多次
-  * (a)?    出現 0 次或 1 次
-  * (a|b)   出現 a 或 b
+  註: EBNF 語法包括下列四項:
+    * (a){{{*}}}    出現 0 次或多次
+    * (a)+    出現 1 次或多次
+    * (a)?    出現 0 次或 1 次
+    * (a|b)   出現 a 或 b
 --------------------------------------------------
 
   * 在第 3 行的 use_paull_algo = yes; 用來指定要執行 left recursion removal. 所使用的演算法是 Paull's algorithm. 注意這個功能只有在 using_pure_BNF = yes; 的時候才有用.
@@ -66,7 +65,7 @@ http://lh6.google.com/wei.hu.tw/RzsrrG461NI/AAAAAAAAAEg/trO6w-yKRKY/grammar_file
 底下是更多的 rule 寫法範例:
 
 "A"
-: "a" ("B" "B" ("d" "e")* | "c")* "a"
+: "a" ("B" "B" ("d" "e"){{{*}}} | "c"){{{*}}} "a"
 ;
 
 "B"
