@@ -1,0 +1,25 @@
+{
+  k = 2;
+  use_paull_algo = yes;
+  enable_left_factor = yes;
+  using_pure_BNF = yes;
+}
+
+"a"
+"b"
+"c"
+;
+
+"B"
+: "a"
+| "B_tail"
+;
+
+"B_tail"
+: "c" "B"
+| "c" "a" "C" "b"
+;
+
+"C"
+: "a"
+;
