@@ -1,0 +1,18 @@
+{
+  k = 2;
+  using_pure_BNF = yes;
+}
+
+"a"
+"b"
+;
+
+"S"
+: "a" "A" "a"
+| "b" "A" "b" "a"
+;
+
+"A"
+: "b"
+| "...epsilon..."
+;
