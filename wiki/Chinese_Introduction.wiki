@@ -23,8 +23,8 @@ Wei Parser Generator 目前支援 Microsoft Visual C++ 2005 (express) compiler. 
 
 Wei Parser Generator (wpg) 使用到 C++ (STL) 及 [http://www.boost.org/ boost] library 以及 [http://code.google.com/p/wei-common-library/ Wei Common Library], 所以要編譯 wpg 需要一個 C++ compiler (越符合 C++ standard 越好), 以及事先安裝好 boost library 及 Wei Common Library.
 
-boost: http://www.boost.org/
-Wei Common Library: http://code.google.com/p/wei-common-library/
+  * boost: http://www.boost.org/
+  * Wei Common Library: http://code.google.com/p/wei-common-library/
 
 =Grammar File Syntax Specification=
 
