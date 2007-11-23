@@ -21,9 +21,10 @@ http://lh6.google.com/wei.hu.tw/RzsrrG461OI/AAAAAAAAAEo/xXjdAzgyJsw/grammar_tree
 
 Wei Parser Generator supports Microsoft Visual C++ 2005 (express) compiler now. However, theoretically, any C++ standard compliant compiler can compile wpg without problems.
 
-Wei Parser Generator (wpg) uses C++ (STL) and the boost library, so you need to install a C++ standard compliant compiler and the boost library.
+Wei Parser Generator (wpg) uses C++ (STL) and the [http://www.boost.org/ boost] library and [http://code.google.com/p/wei-common-library/ Wei Common Library], so you need to install a C++ standard compliant compiler and the boost library and Wei Common Library.
 
-boost: http://www.boost.org/
+  * boost: http://www.boost.org/
+  * Wei Common Library: http://code.google.com/p/wei-common-library/
 
 =Grammar File Syntax Specification=
 
