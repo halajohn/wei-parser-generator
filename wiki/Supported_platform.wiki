@@ -1,0 +1,13 @@
+===============================================================
+
+Wei Parser Generator 目前支援的平台有:
+
+  * Win32 (using Visual C++ 2005 (express))
+
+===============================================================
+
+The supported platforms of "Wei Parser Generator" includes:
+
+  * Win32 (using Visual C++ 2005 (express)).
+
+===============================================================
