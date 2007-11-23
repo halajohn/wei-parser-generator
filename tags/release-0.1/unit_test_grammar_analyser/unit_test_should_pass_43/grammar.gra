@@ -1,0 +1,24 @@
+{
+  k = 2;
+  use_paull_algo = yes;
+  using_pure_BNF = yes;
+}
+
+"a"
+"b"
+;
+
+"A"
+: "B"
+| "a" "A"
+;
+
+"B"
+: "a"
+| "B_tail"
+;
+
+"B_tail"
+: "b" "B"
+| "b" "a"
+;
