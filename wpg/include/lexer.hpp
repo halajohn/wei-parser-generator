@@ -45,97 +45,22 @@ lexer_get_answer_string(
   T &file,
   std::list<wchar_t> const &delimiter)
 {
-  wchar_t ch;
-  bool result;
+  std::list<wchar_t> skip;
+  boost::shared_ptr<std::wstring> result_str(::new std::wstring);
   
-  /* read the first character. */
-  result = lexerlib_read_ch(file, &ch);
-  if (false == result)
+  skip.push_back(L' ');
+  
+  try
+  {
+    Wcl::Lexerlib::read_string(file, delimiter, skip, *(result_str.get()));
+  }
+  catch (Wcl::Lexerlib::SourceIsBrokenException &)
   {
     /* if read failed, return 0. */
     throw ga_exception_t();
   }
-  else
-  {
-    if (WEOF == ch)
-    {
-      return boost::shared_ptr<std::wstring>(new std::wstring(L"EOF"));
-    }
-  }
   
-  /* read success */
-  
-  if (L' ' == ch)
-  {
-    /* If I first read a space, then I have to read further
-     * to see the first normal character.
-     */
-    result = lexerlib_read_ch(file, &ch);
-    if (false == result)
-    {
-      /* read failed. */
-      throw ga_exception_t();
-    }
-    else
-    {
-      if (WEOF == ch)
-      {
-        return boost::shared_ptr<std::wstring>(new std::wstring(L"EOF"));
-      }
-    }
-  }
-  
-  /* If the first normal character is a delimiter, then return it
-   * immediately.
-   */
-  for (std::list<wchar_t>::const_iterator iter = delimiter.begin();
-       iter != delimiter.end();
-       ++iter)
-  {
-    if ((*iter) == ch)
-    {
-      return boost::shared_ptr<std::wstring>(new std::wstring(1, ch));
-    }
-  }
-  
-  bool see_delimiter;
-  boost::shared_ptr<std::wstring> token_str(new std::wstring);
-  
-  do
-  {
-    see_delimiter = false;
-    
-    (*token_str) += ch;
-    
-    result = lexerlib_read_ch(file, &ch);
-    if (false == result)
-    {
-      throw ga_exception_t();
-    }
-    
-    if ((L' ' == ch) || (WEOF == ch))
-    {
-      return token_str;
-    }
-    
-    for (std::list<wchar_t>::const_iterator iter = delimiter.begin();
-         iter != delimiter.end();
-         ++iter)
-    {
-      if ((*iter) == ch)
-      {
-        see_delimiter = true;
-        break;
-      }
-    }
-    
-    if (true == see_delimiter)
-    {
-      lexerlib_put_back(file, ch);
-      
-      return token_str;
-    }
-  } while (1);
+  return result_str;
 }
 
 #endif

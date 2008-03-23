@@ -40,6 +40,8 @@ private:
   
   std::list<arranged_lookahead_t> mp_children;
   
+  arranged_lookahead_t &operator=(arranged_lookahead_t const &);
+
 public:
   
   arranged_lookahead_t(arranged_lookahead_t * const parent,

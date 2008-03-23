@@ -34,7 +34,7 @@ arranged_lookahead_t::find_first_child_node()
   
   arranged_lookahead_t *parent = this;
   
-  while (1)
+  for (;;)
   {
     if (0 == parent->children().size())
     {
@@ -45,9 +45,6 @@ arranged_lookahead_t::find_first_child_node()
       parent = &(parent->children().front());
     }
   }
-  
-  assert(0);
-  return 0;
 }
 
 arranged_lookahead_t::iterator &
@@ -86,7 +83,7 @@ arranged_lookahead_t::iterator::operator++()
   arranged_lookahead_t *node = mp_arranged_lookahead;
   arranged_lookahead_t *parent = 0;
   
-  while (1)
+  for (;;)
   {
     if (0 == node->parent())
     {
@@ -118,7 +115,7 @@ arranged_lookahead_t::iterator::operator++()
     }
   }
   
-  while (1)
+  for (;;)
   {
     if (0 == parent)
     {
@@ -677,7 +674,7 @@ find_first_different_arranged_lookahead(
   iter1 = tree1.begin();
   iter2 = tree2.begin();
   
-  while (1)
+  for (;;)
   {
     if ((iter1 != tree1.end()) && (iter2 != tree2.end()))
     {

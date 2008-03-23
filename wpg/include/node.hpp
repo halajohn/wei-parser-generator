@@ -680,10 +680,8 @@ private:
     std::wfstream &file) const;
   
   void collect_regex_info_into_regex_stack(
-    std::wfstream &file,
     node_t const * const curr_node,
     std::list<regex_info_with_arranged_lookahead_t> &regex_stack,
-    unsigned int &indent_depth,
     node_t * const default_node) const;
   
   void dump_gen_parser_src__parse_XXX__each_regex_level_header_codes(
@@ -691,6 +689,8 @@ private:
     std::list<regex_info_with_arranged_lookahead_t> &regex_stack,
     unsigned int &indent_depth,
     node_t * const default_node) const;
+
+  node_t &operator=(node_t const &);
 };
 typedef class node_t node_t;
 

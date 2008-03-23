@@ -37,12 +37,10 @@ typedef enum check_regex_group_pos_t check_regex_group_pos_t;
 
 extern void dump_gen_parser_src_real(
   std::wfstream &file,
-  arranged_lookahead_t const * const arranged_lookahead_top,
   node_t const * const rule_node,
   node_t const * const default_node,
   std::list<node_with_order_t> &nodes,
-  unsigned int const indent_depth,
-  unsigned int const lookahead_depth);
+  unsigned int const indent_depth);
 
 extern std::wstring indent_line(
   unsigned int const indent_level);

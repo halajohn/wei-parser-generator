@@ -51,21 +51,28 @@ analyser_environment_t::parse_answer_lookahead(node_t * const node,
   
   std::wstring src_str_i = src_str;
   
-  do
+  for (;;)
   {
-    boost::shared_ptr<std::wstring> str(
-      ::lexer_get_answer_string<std::wstring>(src_str_i, delimiter));
+    boost::shared_ptr<std::wstring> str;
     
-    assert(str->size() != 0);
-    if (0 == str->compare(L"EOF"))
+    try
+    {
+      str = ::lexer_get_answer_string<std::wstring>(src_str_i, delimiter);
+      assert(str->size() != 0);
+    }
+    catch (Wcl::Lexerlib::EndOfSourceException &)
     {
       if (src_str_i.size() != 0)
       {
         log(L"<ERROR>: answer file error, incorrect lookahead format: %s\n",
             src_str.c_str());
+        
         throw ga_exception_t();
       }
-	  break;
+      else
+      {
+        break;
+      }
     }
     
     if (0 == str->compare(L","))
@@ -102,7 +109,7 @@ analyser_environment_t::parse_answer_lookahead(node_t * const node,
           curr_lookahead_set->insert_lookahead(node);
       }
     }
-  } while(1);
+  }
 }
 
 /// 
@@ -207,7 +214,7 @@ analyser_environment_t::parse_answer_file(std::wfstream * const answer_file)
   assert(answer_file != 0);
   assert(true == answer_file->is_open());
   
-  bool repeat;
+  bool repeat = true;
   node_t *node;
   parse_answer_state_t state = PARSE_ANSWER_STATE_NONTERMINAL;
   bool latest_char_is_linefeed;
@@ -219,15 +226,19 @@ analyser_environment_t::parse_answer_file(std::wfstream * const answer_file)
   
   do
   {
-    boost::shared_ptr<std::wstring> str(
-      ::lexer_get_answer_string<std::wfstream>(*answer_file, delimiter));
+    boost::shared_ptr<std::wstring> str;
     
-    assert(str->size() != 0);
-    if (0 == str->compare(L"EOF"))
+    try
+    {
+      str = ::lexer_get_answer_string<std::wfstream>(*answer_file, delimiter);
+      assert(str->size() != 0);
+    }
+    catch (Wcl::Lexerlib::EndOfSourceException &)
     {
       repeat = false;
     }
-    else
+    
+    if (true == repeat)
     {
       if (str->compare(L"\r") != 0)
       {
@@ -239,7 +250,6 @@ analyser_environment_t::parse_answer_file(std::wfstream * const answer_file)
           hash_answer(node);
         }
       }
-      repeat = true;
     }
   } while (true == repeat);
   

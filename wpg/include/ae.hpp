@@ -192,10 +192,8 @@ public:
   std::wstring const &grammar_file_name() const
   { return m_grammar_file_name; }
   
-  wchar_t lexer_get_grammar_char();
-  
-  void lexer_put_grammar_string(
-    boost::shared_ptr<std::wstring> grammar_string);
+  //.................void lexer_put_grammar_string(
+  //.................  boost::shared_ptr<std::wstring> grammar_string);
   
   boost::shared_ptr<std::wstring>
   lexer_get_grammar_string(
@@ -393,8 +391,6 @@ private:
   std::wfstream m_grammar_file;
   std::wstring m_output_filename;
   std::wfstream *mp_output_file;
-  
-  boost::shared_ptr<std::wstring> mp_saved_grammar_string;
   
   std::list<node_t *> m_top_level_nodes;
   std::list<node_t *> m_answer_nodes;

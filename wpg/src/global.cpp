@@ -50,7 +50,7 @@ bool
 check_not_cyclic(
   analyser_environment_t const * const /* ae */,
   node_t * const node,
-  void * const param)
+  void * const /* param */)
 {
   if (node->is_cyclic())
   {
@@ -503,6 +503,8 @@ namespace
     
     component_name_map_type &m_component_name_map;
     
+    collect_node_appear_times &operator=(collect_node_appear_times const &);
+
   public:
     
     collect_node_appear_times(
@@ -526,6 +528,8 @@ namespace
     
     component_name_map_type &m_component_name_map;
     
+    assign_node_name_postfix_by_appear_times &operator=(assign_node_name_postfix_by_appear_times const &);
+
   public:
     
     assign_node_name_postfix_by_appear_times(

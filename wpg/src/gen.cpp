@@ -326,7 +326,7 @@ namespace
             // A B G H
             //
             // Then I have to dump strings for 'A B' now.
-            while (1)
+            for (;;)
             {
               bool finish = false;
             
@@ -447,12 +447,10 @@ namespace
 void
 dump_gen_parser_src_real(
   std::wfstream &file,
-  arranged_lookahead_t const * const arranged_lookahead_top,
   node_t const * const rule_node,
   node_t const * const default_node,
   std::list<node_with_order_t> &nodes,
-  unsigned int const indent_depth,
-  unsigned int const lookahead_depth)
+  unsigned int const indent_depth)
 {
   // If I meet an ambiguious situation, I have to return.
   check_ambiguity(nodes);
@@ -466,7 +464,7 @@ dump_gen_parser_src_real(
   //
   // Then I have to dump strings for 'A B' now.
   bool dump_at_least_one = false;
-  while (1)
+  for (;;)
   {
     bool finish = false;
       
@@ -578,8 +576,7 @@ namespace
   dump_name_for_one_node(
     std::wfstream &file,
     node_t const * const node,
-    unsigned int const idx,
-    unsigned int const indent_level)
+    unsigned int const idx)
   {
     file << "mp_";
     
@@ -617,7 +614,7 @@ dump_class_member_variable_for_one_node(
   
   file << "node_t *";
   
-  dump_name_for_one_node(file, node, idx, indent_level);
+  dump_name_for_one_node(file, node, idx);
   
   file << ";" << std::endl;
 }
@@ -631,7 +628,7 @@ dump_class_default_constructor_for_one_node(
 {
   file << indent_line(indent_level);
 
-  dump_name_for_one_node(file, node, idx, indent_level);
+  dump_name_for_one_node(file, node, idx);
   
   file << "(0)";
 }
@@ -646,13 +643,13 @@ dump_class_destructor_for_one_node(
   file << indent_line(indent_level)
        << "if (";
   
-  dump_name_for_one_node(file, node, idx, indent_level);
+  dump_name_for_one_node(file, node, idx);
   
   file << " != 0)" << std::endl
        << indent_line(indent_level) << "{" << std::endl
        << indent_line(indent_level + 1) << "delete ";
   
-  dump_name_for_one_node(file, node, idx, indent_level);
+  dump_name_for_one_node(file, node, idx);
   
   file << ";" << std::endl
        << indent_line(indent_level) << "}" << std::endl;

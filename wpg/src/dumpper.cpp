@@ -154,7 +154,7 @@ namespace
   }
   
   bool
-  dump_nodes(analyser_environment_t const * const ae,
+  dump_nodes(analyser_environment_t const * const /* ae */,
              node_t * const node,
              void * const param)
   {
@@ -208,7 +208,7 @@ namespace
   }
 
   bool
-  dump_rules(analyser_environment_t const * const ae,
+  dump_rules(analyser_environment_t const * const /* ae */,
              node_t * const rule_node,
              void * const param)
   {
@@ -310,18 +310,9 @@ analyser_environment_t::dump_tree(std::wstring const &filename)
     
     DWORD dwExitCode;
     
-    if (1)
-    {
-      /// wait for the 'dot' finished.
-      WaitForSingleObject(procInfo.hProcess, INFINITE);
-      GetExitCodeProcess(procInfo.hProcess, &dwExitCode);
-    }
-    else
-    {
-      CloseHandle(procInfo.hProcess);
-      CloseHandle(procInfo.hThread);
-      dwExitCode = 0;
-    }
+    /// wait for the 'dot' finished.
+    WaitForSingleObject(procInfo.hProcess, INFINITE);
+    GetExitCodeProcess(procInfo.hProcess, &dwExitCode);
   }
   
   traverse_all_nodes(clear_node_state, 0, 0);

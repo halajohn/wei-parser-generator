@@ -23,109 +23,25 @@
 
 #include "wcl_memory_debugger\memory_debugger.h"
 
-wchar_t
-analyser_environment_t::lexer_get_grammar_char()
-{
-  wchar_t ch;
-  
-  /* read the first character. */
-  bool const result = lexerlib_read_ch(m_grammar_file, &ch);
-  if (false == result)
-  {
-    /* if read failed, return 0. */
-    throw ga_exception_t();
-  }
-  
-  return ch;
-}
-
-void
-analyser_environment_t::lexer_put_grammar_string(
-  boost::shared_ptr<std::wstring> grammar_string)
-{
-  mp_saved_grammar_string = grammar_string;
-}
-
 boost::shared_ptr<std::wstring>
 analyser_environment_t::lexer_get_grammar_string(
   std::list<wchar_t> const &delimiter)
 {
-  if (mp_saved_grammar_string.get() != 0)
+  std::list<wchar_t> skip;
+  boost::shared_ptr<std::wstring> result_str(::new std::wstring);
+  
+  skip.push_back(L' ');
+  skip.push_back(L'\n');
+  skip.push_back(L'\r');
+  
+  try
   {
-    boost::shared_ptr<std::wstring> result(mp_saved_grammar_string);
-    
-    mp_saved_grammar_string.reset();
-    
-    return result;
+    Wcl::Lexerlib::read_string(m_grammar_file, delimiter, skip, *(result_str.get()));
   }
-  else
+  catch (Wcl::Lexerlib::SourceIsBrokenException &)
   {
-    wchar_t ch;
-  
-    ch = lexer_get_grammar_char();
-    if (WEOF == ch)
-    {
-      return boost::shared_ptr<std::wstring>(new std::wstring(L"EOF"));
-    }
-  
-    // read success
-  
-    while ((L' ' == ch) || (L'\n' == ch) || (L'\r' == ch))
-    {
-      // If I first see a SPACE, NL, or CR,
-      // then I have to read further to see the first normal
-      // character.
-      ch = lexer_get_grammar_char();
-      if (WEOF == ch)
-      {
-        return boost::shared_ptr<std::wstring>(new std::wstring(L"EOF"));
-      }
-    }
-  
-    // If the first normal character is a delimiter, then return it
-    // immediately.
-    BOOST_FOREACH(wchar_t const &del_ch, delimiter)
-    {
-      if (del_ch == ch)
-      {
-        return boost::shared_ptr<std::wstring>(new std::wstring(1, ch));
-      }
-    }
-  
-    bool see_delimiter;
-    boost::shared_ptr<std::wstring> token_str(new std::wstring);
-  
-    do
-    {
-      see_delimiter = false;
-    
-      (*token_str) += ch;
-    
-      ch = lexer_get_grammar_char();
-    
-      if ((L' ' == ch) ||
-          (L'\n' == ch) ||
-          (L'\r' == ch) ||
-          (WEOF == ch))
-      {
-        return token_str;
-      }
-      
-      BOOST_FOREACH(wchar_t const &del_ch, delimiter)
-      {
-        if (del_ch == ch)
-        {
-          see_delimiter = true;
-          break;
-        }
-      }
-      
-      if (true == see_delimiter)
-      {
-        lexerlib_put_back(m_grammar_file, ch);
-        
-        return token_str;
-      }
-    } while (1);
+    throw ga_exception_t();
   }
+  
+  return result_str;
 }

@@ -112,7 +112,7 @@ analyser_environment_t::parse_command_line(int argc, char **argv)
 bool
 check_not_optional(analyser_environment_t const * const /* ae */,
                    node_t * const node,
-				   void * const param)
+				   void * const /* param */)
 {
   if (node->is_optional())
   {
@@ -127,7 +127,7 @@ check_not_optional(analyser_environment_t const * const /* ae */,
 bool
 clear_cyclic_set(analyser_environment_t const * const /* ae */,
                  node_t * const node,
-                 void * const param)
+                 void * const /* param */)
 {
   node->clear_cyclic_set();
   return true;
@@ -136,7 +136,7 @@ clear_cyclic_set(analyser_environment_t const * const /* ae */,
 bool
 check_no_epsilon(analyser_environment_t const * const /* ae */,
                  node_t * const node,
-                 void * const param)
+                 void * const /* param */)
 {
   if (node->is_rule_head())
   {
@@ -156,7 +156,7 @@ check_no_epsilon(analyser_environment_t const * const /* ae */,
 bool
 link_nonterminal(analyser_environment_t const * const ae,
                  node_t * const node,
-				 void * const param)
+				 void * const /* param */)
 {
   if ((false == node->is_rule_head()) &&
       (false == node->is_terminal()) &&
