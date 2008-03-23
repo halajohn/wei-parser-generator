@@ -38,6 +38,8 @@ private:
   node_t * const mp_node;
   unsigned int * const mp_prev_level_walk_count;
   
+  recur_lookahead_t &operator=(recur_lookahead_t const &);
+
 public:
   
   recur_lookahead_t(
@@ -56,6 +58,12 @@ typedef class recur_lookahead_t recur_lookahead_t;
 
 struct lookahead_set_t
 {
+private:
+
+  lookahead_set_t &operator=(lookahead_set_t const &);
+
+public:
+
   node_t * mp_orig_node; /* original grammar node for lookahead search */
   node_t * const mp_node; /* lookahead terminal */
   unsigned int const m_level;
@@ -77,6 +85,12 @@ typedef struct lookahead_set_t lookahead_set_t;
 
 struct todo_lookahead_t
 {
+private:
+
+  todo_lookahead_t &operator=(todo_lookahead_t const &);
+
+public:
+
   lookahead_set_t * const mp_lookahead_a; /* need to find more lookahead terminals
                                            * from this lookahead terminal.
                                            */

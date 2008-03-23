@@ -563,7 +563,8 @@ node_t::check_if_regex_info_is_correct() const
 #if defined(_DEBUG)
   node_t *prev_start_node = 0;
   node_t *prev_end_node = 0;
-  regex_type_t prev_regex_type;
+  // Initialize to a dummy value.
+  regex_type_t prev_regex_type = REGEX_TYPE_OR;
   
   BOOST_FOREACH(regex_info_t const &regex_info, m_regex_info)
   {
@@ -589,6 +590,8 @@ node_t::check_if_regex_info_is_correct() const
       
     default:
       assert(0);
+      real_start_node = 0;
+      real_end_node = 0;
       break;
     }
     
@@ -626,7 +629,7 @@ bool
 check_if_regex_info_is_empty(
   analyser_environment_t const * const,
   node_t * const node,
-  void *param)
+  void * /* param */)
 {
   if (0 == node->regex_info().size())
   {
@@ -642,7 +645,7 @@ bool
 check_if_regex_info_is_correct_for_traverse_all_nodes(
   analyser_environment_t const * const,
   node_t * const node,
-  void *param)
+  void * /* param */)
 {
   node->check_if_regex_info_is_correct();
   
@@ -653,7 +656,7 @@ bool
 delete_regex_type_one(
   analyser_environment_t const * const,
   node_t * const node,
-  void *param)
+  void * /* param */)
 {
   for (std::list<regex_info_t>::iterator iter = node->tmp_regex_info().begin();
        iter != node->tmp_regex_info().end();
@@ -676,9 +679,9 @@ delete_regex_type_one(
 
 bool
 clear_node_state(
-  analyser_environment_t const * const ae,
+  analyser_environment_t const * const /* ae */,
   node_t * const node,
-  void * const param)
+  void * const /* param */)
 {
   node->set_traversed(false);
   node->set_create_dot_node_line(false);

@@ -188,10 +188,10 @@ node_t::dump_gen_parser_src__fill_nodes__for_node_range(
           regex_stack.push_front(&(*iter));
           
           // Everytime when I find a regex started at this
-          // node, emit 'while (1)' codes here.
+          // node, emit 'for (;;)' codes here.
           if ((*iter).m_type != REGEX_TYPE_ONE)
           {
-            file << indent_line(indent_depth) << "while (1)" << std::endl
+            file << indent_line(indent_depth) << "for (;;)" << std::endl
                  << indent_line(indent_depth) << "{" << std::endl;
             
             ++indent_depth;
@@ -292,8 +292,6 @@ node_t::dump_gen_parser_src__fill_nodes__for_node_range(
     
     regex_group_id_t regex_group_id = REGEX_GROUP_ID_NONE;
     bool this_regex_group_id_represent_regex_OR = false;
-    bool meet_regex_OR_one_end = false;
-    bool meet_regex_OR_total_end = false;
     
     // Find the correct regex_group_id of the parent regex.
     if (regex_stack.size() != 0)
@@ -473,7 +471,7 @@ node_t::dump_gen_parser_src__fill_nodes__for_node_range(
             assert(indent_depth > 0);
             --indent_depth;
             
-            // Dump the '}' of the 'while (1) {'
+            // Dump the '}' of the 'for (;;) {'
             // statement of each regex group.
             file << indent_line(indent_depth) << "}" << std::endl
                  << std::endl;
@@ -559,14 +557,10 @@ namespace
 
 void
 node_t::collect_regex_info_into_regex_stack(
-  std::wfstream &file,
   node_t const * const curr_node,
   std::list<regex_info_with_arranged_lookahead_t> &regex_stack,
-  unsigned int &indent_depth,
   node_t * const default_node) const
 {
-  std::wstring const &rule_node_name = m_name;
-  
   // Loop each regex from back to front (ie. from outer
   // most to inner most)
   for (std::list<regex_info_t>::const_reverse_iterator iter =
@@ -617,7 +611,7 @@ node_t::dump_gen_parser_src__parse_XXX__each_regex_level_header_codes(
   {
     if (regex_stack.back().mp_regex_info->m_type != REGEX_TYPE_ONE)
     {
-      file << indent_line(indent_depth) << "while (1)" << std::endl
+      file << indent_line(indent_depth) << "for (;;)" << std::endl
            << indent_line(indent_depth) << "{" << std::endl;
       
       ++indent_depth;
@@ -860,7 +854,7 @@ namespace
     
     node_t *checking_node = regex_range->mp_start_node;
     
-    while (1)
+    for (;;)
     {
       std::list<regex_info_t>::const_reverse_iterator checking_node_iter =
         find_regex_info_using_its_begin_and_end_node(
@@ -927,7 +921,7 @@ node_t::dump_gen_parser_src__parse_XXX__real(
   
   node_t const *curr_node = mp_main_regex_alternative;
   
-  while (1)
+  for (;;)
   {
     bool has_node_before_any_regex = false;
     
@@ -964,9 +958,9 @@ node_t::dump_gen_parser_src__parse_XXX__real(
   
     node_t const * const first_node_beyond_this_regex =
       curr_node->regex_info().back().m_ranges.front().mp_end_node->next_nodes().front();
-  
+    
     collect_regex_info_into_regex_stack(
-      file, curr_node, regex_stack, indent_depth, default_node.get());
+      curr_node, regex_stack, default_node.get());
   
     while (regex_stack.size() != 0)
     {
@@ -1316,7 +1310,7 @@ node_t::dump_gen_parser_src__parse_XXX__real(
           assert(indent_depth > 0);
           --indent_depth;
           
-          // Close the 'while (1)' codes for this regex.
+          // Close the 'for (;;)' codes for this regex.
           file << indent_line(indent_depth) << "}" << std::endl;
           
           // Decide if I need to dump a new line here or

@@ -167,8 +167,6 @@ analyser_environment_t::remove_left_recur()
   
   remove_immediate_left_recursion(m_top_level_nodes.front());
   
-  unsigned int idx = 1;
-  
 #if 0
   // dump tree.
   std::wstringstream ss;
@@ -507,9 +505,9 @@ analyser_environment_t::detect_left_recursion_nonterminal_for_one_rule(
         std::list<stack_elem_for_left_recursion_detection> tmp_stack;
         
         bool can_not_find_meaningful_node = false;
-        node_t *next_meaningful_node;
+        node_t *next_meaningful_node = 0;
       
-        while (1)
+        for (;;)
         {
           if (1 == stack.size())
           {
@@ -539,7 +537,9 @@ analyser_environment_t::detect_left_recursion_nonterminal_for_one_rule(
         {
           continue;
         }
-      
+        
+        assert(next_meaningful_node != 0);
+        
         if (false == next_meaningful_node->is_terminal())
         {
           assert(next_meaningful_node->nonterminal_rule_node() != 0);

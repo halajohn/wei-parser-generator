@@ -225,6 +225,8 @@ namespace
     
     std::list<node_t *> &m_nodes;
     
+    collect_nodes &operator=(collect_nodes const &);
+    
   public:
     
     collect_nodes(std::list<node_t *> &nodes)
@@ -285,6 +287,8 @@ namespace
     node_t * const mp_if_this_node;
     node_t * const mp_change_to_this_node;
     std::list<regex_info_t *> * const mp_changed_regex_info;
+    
+    patch_tmp_regex_info_for_prev_nodes &operator=(patch_tmp_regex_info_for_prev_nodes const &);
   
   public:
   
@@ -1088,7 +1092,7 @@ A (B C | D)* E
  *   case TOKEN_B:
  *   case TOKEN_D:
  *     {
- *       while (1)
+ *       for (;;)
  *       {
  *         bool finish = false;
  *         
@@ -1733,7 +1737,7 @@ namespace
   restore_each_node_regex_info_for_regex_main_alternative(
     analyser_environment_t const * const,
     node_t * const node,
-    void *param)
+    void * /* param */)
   {
     assert(true == node->is_rule_head());
     
@@ -1784,6 +1788,8 @@ private:
   regex_info_t * const mp_regex_OR_info;
   regex_type_t const m_type;
   
+  push_front_regex_info &operator=(push_front_regex_info const &);
+
 public:
   
   push_front_regex_info(
@@ -1847,7 +1853,7 @@ namespace
   fill_regex_info_to_relative_nodes(
     analyser_environment_t const * const,
     node_t * const node,
-    void *param)
+    void * /* param */)
   {
     // This variable is used for the regex_OR combination.
     regex_info_t *prev_regex_info = 0;
@@ -1965,7 +1971,7 @@ namespace
   fill_regex_info_to_relative_nodes_for_regex_main_alternative(
     analyser_environment_t const * const,
     node_t * const node,
-    void *param)
+    void * /* param */)
   {
     assert(true == node->is_rule_head());
     
@@ -2102,7 +2108,7 @@ check_if_this_node_is_the_possible_starting_node_of_a_regex(
     assert(1 == inner_regex->m_ranges.size());
     assert(regex_start_node == inner_regex->m_ranges.front().mp_start_node);
     
-    while (1)
+    for (;;)
     {
       if (true == check_if_node_in_node_range(
             node,
@@ -2189,8 +2195,6 @@ check_if_this_node_is_the_possible_starting_node_of_a_regex(
       }
     }
   }
-  
-  assert(0);
 }
 
 std::list<regex_info_t>::const_reverse_iterator
@@ -2451,8 +2455,6 @@ bool check_if_this_node_is_the_starting_one_of_a_regex_OR_range(
     
     return false;
   }
-  
-  return true;
 }
 
 void

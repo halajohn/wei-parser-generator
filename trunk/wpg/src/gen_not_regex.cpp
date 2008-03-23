@@ -180,11 +180,9 @@ node_t::dump_gen_parser_src_for_not_regex_alternative(
     }
     
     dump_gen_parser_src_real(file,
-                             0,
                              this,
                              default_node.get(),
                              nodes,
-                             1,
                              1);
   }
     

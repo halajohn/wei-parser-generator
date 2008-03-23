@@ -26,6 +26,12 @@ struct regex_info_t;
 
 struct regex_info_with_arranged_lookahead_t
 {
+private:
+
+  regex_info_with_arranged_lookahead_t &operator=(regex_info_with_arranged_lookahead_t const &);
+
+public:
+
   regex_info_t const * const mp_regex_info;
   bool m_first_enter_this_regex;
   node_t *mp_curr_node;

@@ -1014,6 +1014,8 @@ namespace
     node_t const * const mp_rule_node;
     std::list<todo_nodes_t> &m_todo_nodes;
     
+    find_candidate_nodes_for_lookahead_searching &operator=(find_candidate_nodes_for_lookahead_searching const &);
+
   public:
     
     find_candidate_nodes_for_lookahead_searching(

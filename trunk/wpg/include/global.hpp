@@ -70,6 +70,12 @@ typedef struct todo_nodes_t todo_nodes_t;
 
 struct last_symbol_t
 {
+private:
+
+  last_symbol_t &operator=(last_symbol_t const &);
+
+public:
+
   node_t * const mp_node;
   unsigned int const level;
   

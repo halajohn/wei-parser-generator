@@ -84,6 +84,68 @@ analyser_environment_t::~analyser_environment_t()
   }
 }
 
+namespace
+{
+  void
+  update_rule_node_attribute_when_seeing_a_regex(
+    analyser_environment_t * const ae)
+  {
+    assert(ae != 0);
+    
+    // I see a regex, thus I have to set the
+    // 'rule_contain_regex' attribute of the this rule node
+    // (ie. the latest one) to true.
+    //
+    // Note:
+    //
+    // I don't set this variable when I see the '('
+    // token. This is because I want to set the
+    // 'rule_contain_regex' & 'main_regex_alternative' at
+    // the same time.
+    //
+    // Ex, In the following case,
+    // when I see the first '(' token, I don't parse the
+    // first node yet, hence I can not set
+    // 'main_regex_alternative'.
+    //
+    // (A B)* C
+    //
+    // Thus, I move the setting of these 2 variables to
+    // the time when I see a ')'.
+    switch (ae->last_rule_node()->rule_contain_regex())
+    {
+    case RULE_CONTAIN_NO_REGEX:
+      ae->last_rule_node()->rule_contain_regex() = RULE_CONTAIN_REGEX;
+      break;
+      
+    case RULE_CONTAIN_REGEX:
+    case RULE_CONTAIN_REGEX_OR:
+      break;
+      
+    default:
+      assert(0);
+      break;
+    }
+    
+    // If this rule is a regex rule, then it should
+    // contain only 1 alternative.
+    assert(1 == ae->last_rule_node()->next_nodes().size());
+    
+    // I have already parse some nodes of this
+    // alternative.
+    if (ae->last_rule_node()->main_regex_alternative() != 0)
+    {
+      assert(ae->last_rule_node()->main_regex_alternative() == 
+             ae->last_rule_node()->next_nodes().front());
+    }
+    else
+    {
+      ae->last_rule_node()->main_regex_alternative() =
+        ae->last_rule_node()->next_nodes().front();
+    }
+  }
+}
+
 /// 
 /// \dot
 /// digraph example {
@@ -122,6 +184,9 @@ analyser_environment_t::parse_rule_head(
   std::wstring const &str,
   std::list<regex_stack_elem_t> &regex_stack)
 {
+  // If I have already parsed some rule head nodes, then I
+  // have to check something and do some operations for the
+  // latest rule head node.
   if (m_top_level_nodes.size() != 0)
   {
     // Check to see if this non-terminal rule node has
@@ -141,12 +206,21 @@ analyser_environment_t::parse_rule_head(
       return false;
     }
     
+    // I will count the alternative length for each
+    // alternative, so that I have to count it for the last
+    // alternative of the last rule node here.
     last_rule_node()->next_nodes().back()->alternative_length() =
       count_alternative_length(last_rule_node()->next_nodes().back());
     
     if (false == m_using_pure_BNF)
     {
       assert(false == m_next_token_is_regex_OR_start_node);
+      
+      // If 'm_using_pure_BNR' is 'false', then every rule
+      // will be treated as a regex rule, so that I have to
+      // update its attribute.
+      update_rule_node_attribute_when_seeing_a_regex(this);      
+      assert(last_rule_node()->main_regex_alternative() != 0);
       
       // I have to make sure all the regex_info for the last
       // rule head is closed.
@@ -157,10 +231,8 @@ analyser_environment_t::parse_rule_head(
       //  : a b c
       //  | d e
       //
-      // The regex_info in node 'a' is not closing at this
-      // point, so I have to close it now.
-      assert(last_rule_node()->main_regex_alternative() != 0);
-      
+      // The regex_info starting at node 'a' is not closing
+      // at this point, so I have to close it now.
       if (regex_stack.size() != 0)
       {
         assert(1 == regex_stack.size());
@@ -496,6 +568,10 @@ analyser_environment_t::parse_grammar(
     {
       log(L"<terminal>");
     }
+    
+    // =========================================
+    //          parse terminal symbol
+    // =========================================
     hash_terminal(str);
   }
   else if (STATE_START_RULE == m_state)
@@ -505,6 +581,9 @@ analyser_environment_t::parse_grammar(
       log(L"<rule>");
     }
     
+    // =========================================
+    //             parse rule head
+    // =========================================
     if (false == parse_rule_head(str, regex_stack))
     {
       throw ga_exception_t();
@@ -512,11 +591,18 @@ analyser_environment_t::parse_grammar(
   }
   else if (STATE_READ_ALTERNATIVE_START == m_state)
   {
+    // =========================================
+    //          parse alternative start
+    // =========================================
     parse_alternative_start(str);
+    
     m_state = STATE_READ_ALTERNATIVE;
   }
   else if (STATE_READ_ALTERNATIVE == m_state)
   {
+    // =========================================
+    //             parse alternative
+    // =========================================
     parse_alternative(str);
   }
   else
@@ -559,66 +645,6 @@ enum PARSING_STATE_ENUM
   PARSING_STATE_OPTION,
   PARSING_STATE_CONTROL
 };
-
-namespace
-{
-  void
-  update_rule_node_attribute_when_seeing_a_regex(
-    analyser_environment_t * const ae)
-  {
-    assert(ae != 0);
-    
-    // I see a regex, thus I have to set the
-    // 'rule_contain_regex' attribute of the this rule node
-    // (ie. the latest one) to true.
-    //
-    // Note:
-    //
-    // I don't set this variable when I see the '('
-    // token. This is because I want to set the
-    // 'rule_contain_regex' & 'main_regex_alternative' at
-    // the same time. However, In the following case,
-    // when I see the first '(' token, I don't parse the
-    // first node yet, hence I can not set
-    // 'main_regex_alternative'.
-    //
-    // (A B)* C
-    //
-    // Thus, I move the setting of these 2 variables to
-    // the time when I see a ')'.
-    switch (ae->last_rule_node()->rule_contain_regex())
-    {
-    case RULE_CONTAIN_NO_REGEX:
-      ae->last_rule_node()->rule_contain_regex() = RULE_CONTAIN_REGEX;
-      break;
-              
-    case RULE_CONTAIN_REGEX:
-    case RULE_CONTAIN_REGEX_OR:
-      break;
-              
-    default:
-      assert(0);
-      break;
-    }
-            
-    // If this rule is a regex rule, then it should
-    // contain only 1 alternative.
-    assert(1 == ae->last_rule_node()->next_nodes().size());
-            
-    // I have already parse some nodes of this
-    // alternative.
-    if (ae->last_rule_node()->main_regex_alternative() != 0)
-    {
-      assert(ae->last_rule_node()->main_regex_alternative() == 
-             ae->last_rule_node()->next_nodes().front());
-    }
-    else
-    {
-      ae->last_rule_node()->main_regex_alternative() =
-        ae->last_rule_node()->next_nodes().front();
-    }
-  }
-}
 
 void
 analyser_environment_t::read_grammar(
@@ -665,8 +691,17 @@ analyser_environment_t::read_grammar(
       {
         // read a string one at a time according to
         // 'grammar_state_delimiter'.
-        boost::shared_ptr<std::wstring> str(lexer_get_grammar_string(grammar_state_delimiter));
-        assert(str->size() != 0);
+        boost::shared_ptr<std::wstring> str;
+        
+        try
+        {
+          str = lexer_get_grammar_string(grammar_state_delimiter);
+          assert(str->size() != 0);
+        }
+        catch (Wcl::Lexerlib::EndOfSourceException &)
+        {
+          assert(0);
+        }
         
         if (0 == str->compare(L"\""))
         {
@@ -793,12 +828,19 @@ analyser_environment_t::read_grammar(
         bool ctrl_value_start = false;
         PARSING_CTRL_CMD_ENUM ctrl_cmd = PARSING_CTRL_CMD_NONE;
         
-        do
+        for (;;)
         {
-          boost::shared_ptr<std::wstring> ctrl_str(
-            lexer_get_grammar_string(ctrl_state_delimiter));
+          boost::shared_ptr<std::wstring> ctrl_str;
           
-          assert(ctrl_str->size() != 0);
+          try
+          {
+            ctrl_str = lexer_get_grammar_string(ctrl_state_delimiter);
+            assert(ctrl_str->size() != 0);
+          }
+          catch (Wcl::Lexerlib::EndOfSourceException &)
+          {
+            assert(0);
+          }
           
           if (0 == ctrl_str->compare(L"]"))
           {
@@ -838,7 +880,7 @@ analyser_environment_t::read_grammar(
               break;
             }
           }
-        } while(1);
+        }
       }
       break;
       
@@ -846,10 +888,21 @@ analyser_environment_t::read_grammar(
       {
         // read a string one at a time according to
         // 'normal_state_delimiter'.
-        boost::shared_ptr<std::wstring> str(lexer_get_grammar_string(normal_state_delimiter));
-        assert(str->size() != 0);
+        boost::shared_ptr<std::wstring> str;
         
-        if (0 == str->compare(L"EOF"))
+        bool meet_eof = false;
+        
+        try
+        {
+          str = lexer_get_grammar_string(normal_state_delimiter);
+          assert(str->size() != 0);
+        }
+        catch (Wcl::Lexerlib::EndOfSourceException &)
+        {
+          meet_eof = true;
+        }
+        
+        if (true == meet_eof)
         {
           repeat = false;
         }
@@ -1027,10 +1080,18 @@ analyser_environment_t::read_grammar(
           // This is the end of a regular expression statement,
           // I will get one more symbols to see the type of
           // this regular expression.
-          boost::shared_ptr<std::wstring> str_regex_type(
-            lexer_get_grammar_string(normal_state_delimiter));
-          assert(str_regex_type->size() != 0);
-        
+          boost::shared_ptr<std::wstring> str_regex_type;
+          
+          try
+          {
+            str_regex_type = lexer_get_grammar_string(normal_state_delimiter);
+            assert(str_regex_type->size() != 0);
+          }
+          catch (Wcl::Lexerlib::EndOfSourceException &)
+          {
+            assert(0);
+          }
+          
           // The latest regex info is at the top of the
           // stack.
           regex_stack_elem_t &elem = regex_stack.back();
@@ -1079,8 +1140,8 @@ analyser_environment_t::read_grammar(
             // last '*' is a delimiter, so that it will have
             // to be put into the putback buffer first, and
             // then lexer will return ' d)' to me later.
-            lexerlib_put_back(m_grammar_file,
-                              str_regex_type.get());
+            Wcl::Lexerlib::put_back(m_grammar_file,
+                                    *(str_regex_type.get()));
             regex_type = REGEX_TYPE_ONE;
           }
         
@@ -1210,12 +1271,19 @@ analyser_environment_t::read_grammar(
         bool option_value_start = false;
         PARSING_OPTION_CMD_ENUM option_cmd = PARSING_OPTION_CMD_NONE;
         
-        do
+        for (;;)
         {
-          boost::shared_ptr<std::wstring> option_str(
-            lexer_get_grammar_string(option_state_delimiter));
+          boost::shared_ptr<std::wstring> option_str;
           
-          assert(option_str->size() != 0);
+          try
+          {
+            option_str = lexer_get_grammar_string(option_state_delimiter);
+            assert(option_str->size() != 0);
+          }
+          catch (Wcl::Lexerlib::EndOfSourceException &)
+          {
+            assert(0);
+          }
           
           if (0 == option_str->compare(L"}"))
           {
@@ -1323,7 +1391,7 @@ analyser_environment_t::read_grammar(
               break;
             }
           }
-        } while(1);
+        }
       }
       break;
       
@@ -1343,6 +1411,12 @@ analyser_environment_t::read_grammar(
   {
     assert(false == m_next_token_is_regex_OR_start_node);
     
+    // If 'm_using_pure_BNR' is 'false', then every rule
+    // will be treated as a regex rule, so that I have to
+    // update its attribute.
+    update_rule_node_attribute_when_seeing_a_regex(this);      
+    assert(last_rule_node()->main_regex_alternative() != 0);
+    
     // I have to make sure all the regex_info for the last
     // rule head is closed.
     //
@@ -1354,14 +1428,13 @@ analyser_environment_t::read_grammar(
     //
     // The regex_info in node 'a' is not closing at this
     // point, so I have to close it now.
-    assert(last_rule_node()->main_regex_alternative() != 0);
-    
     if (regex_stack.size() != 0)
     {
       assert(1 == regex_stack.size());
       
       assert(regex_stack.front().m_regex_OR_range.size() != 0);
       assert(0 == regex_stack.front().m_regex_OR_range.back().mp_end_node);
+      
       regex_stack.front().m_regex_OR_range.back().mp_end_node = mp_last_created_node_during_parsing;
       
       regex_stack.front().mp_node->push_back_regex_info(
@@ -1702,7 +1775,7 @@ namespace
 {
   bool
   mark_number_for_one_node(
-    analyser_environment_t const * const ae,
+    analyser_environment_t const * const /* ae */,
     node_t * const node,
     void * const param)
   {
@@ -1742,7 +1815,7 @@ namespace
   check_nonterminal_rule_node_field_is_set(
     analyser_environment_t const * const /* ae */,
     node_t * const node,
-    void * const param)
+    void * const /* param */)
   {
     assert(node != 0);
     
