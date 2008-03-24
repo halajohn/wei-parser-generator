@@ -1,0 +1,15 @@
+{
+  k = 2;
+  use_paull_algo = yes;
+  using_pure_BNF = yes;
+}
+
+"a"
+"b"
+"c"
+;
+
+"A"
+: "a" "b"
+| "a" "c"
+;
