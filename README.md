@@ -56,9 +56,9 @@ After the terminal name block, you can specify each rule of this grammar. Note t
 
 The following are more examples for writing a rule:
 
-"A" : "a" ("B" "B" ("d" "e")* | "c")* "a" ;
+"A" : "a" ("B" "B" ("d" "e")* &#124; "c")* "a" ;
 
-"B" : "e" | "f" ;
+"B" : "e" &#124; "f" ;
 
 # Execute
 
