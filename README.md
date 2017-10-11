@@ -15,7 +15,7 @@ For example, wpg will generate the following graph for the following grammar aft
 
 ![](http://lh6.google.com/wei.hu.tw/RzsrrG461PI/AAAAAAAAAEw/pqmBrDrTy7c/grammar_tree_grammar.jpg)
 
-![]http://lh6.google.com/wei.hu.tw/RzsrrG461OI/AAAAAAAAAEo/xXjdAzgyJsw/grammar_tree.jpg)
+![](http://lh6.google.com/wei.hu.tw/RzsrrG461OI/AAAAAAAAAEo/xXjdAzgyJsw/grammar_tree.jpg)
 
 # Build
 
@@ -23,7 +23,7 @@ Wei Parser Generator supports Microsoft Visual C++ 2005 (express) compiler now. 
 
 Wei Parser Generator (wpg) uses C++ (STL) and the [boost](http://www.boost.org/) library and [Wei Common Library](http://code.google.com/p/wei-common-library/), so you need to install a C++ standard compliant compiler and the boost library and Wei Common Library.
 
-boost: [http://www.boost.org/](http://www.boost.org/)
+boost: [http://www.boost.org/](http://www.boost.org/)  
 Wei Common Library: [http://code.google.com/p/wei-common-library/](http://code.google.com/p/wei-common-library/)
 
 # Grammar File Syntax Specification
