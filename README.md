@@ -38,9 +38,7 @@ Here is an example grammar for wpg:
 
 ![](http://lh6.google.com/wei.hu.tw/RzsrrG461NI/AAAAAAAAAEg/trO6w-yKRKY/grammar_file.jpg)
 
----
-Note: The line number at the left side is for convenience, and it doesn't belong to the grammar.
----
+# Note: The line number at the left side is for convenience, and it doesn't belong to the grammar.
 
 Explain:
 
