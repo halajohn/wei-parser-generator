@@ -38,7 +38,7 @@ Here is an example grammar for wpg:
 
 ![](http://lh6.google.com/wei.hu.tw/RzsrrG461NI/AAAAAAAAAEg/trO6w-yKRKY/grammar_file.jpg)
 
-# Note: The line number at the left side is for convenience, and it doesn't belong to the grammar.
+Note: The line number at the left side is for convenience, and it doesn't belong to the grammar.
 
 Explain:
 
@@ -52,7 +52,7 @@ At the start of a grammar file, you have to use a left brace and a right brace t
 
 After the attribute block, you need to specify all terminal names this grammar may use. Note that there should be at least one empty line (at the line 6 of this example) between the left brace (which ends the attribute block) and the first terminal name. The terminal name block should be ended with a semicolon (at the line 13 of this example). The region between the line 7 and the line 13 of this example is its terminal name block.
 
-After the terminal name block, you can specify each rule of this grammar. Note that there should be at least one empty line (at the line 14 of this example) between the semicolon (which ends the terminal name block) and the first rule, and each rule should be ended with a semicolon. If there are more than one alternatives in one rule, you should use a vertical bar (|) to distinguish them. You can use EBNF syntax in one rule, too.
+After the terminal name block, you can specify each rule of this grammar. Note that there should be at least one empty line (at the line 14 of this example) between the semicolon (which ends the terminal name block) and the first rule, and each rule should be ended with a semicolon. If there are more than one alternatives in one rule, you should use a vertical bar (&#124;) to distinguish them. You can use EBNF syntax in one rule, too.
 
 The following are more examples for writing a rule:
 
