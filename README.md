@@ -46,7 +46,7 @@ At the start of a grammar file, you have to use a left brace and a right brace t
 
 * The "k = 2;" statement at the line 1 is used for specifying the lookahead depth. That is to say, wpg with "k = 2;" will generate an LL(2) parser.
 * The "using_pure_BNF = yes;" statement at the line 2 is used for specifying this grammar only contains BNF syntax. (i.e. contains no EBNF syntax)
-  Note: EBNF syntax contains the following 4 forms: * (a)* appear zero or more times * (a)+ appear one or more times * (a)? appear zero or one time * (a|b) appear 'a' or 'b'
+  Note: EBNF syntax contains the following 4 forms: * (a)* appear zero or more times * (a)+ appear one or more times * (a)? appear zero or one time * (a&#124;b) appear 'a' or 'b'
 * The "use_paull_algo = yes;" statement at the line 3 is used for specifying whether wpg performs the left recursion removal. Note that this option is only useful if you specify "using_pure_BNF = yes;".
 * The "enable_left_factor = yes;" statement at the line 4 is used for specifying whether wpg performs the left factoring in the code generation stage to avoid the ambiguities. Note that this option is only useful if you specify "using_pure_BNF = yes;".
 
